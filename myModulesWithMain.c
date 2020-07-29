@@ -41,7 +41,7 @@ typedef enum Gear
 typedef struct DataFromFile
 {
     unsigned char speed_uc;
-    enum Gear gear_e;
+    Gear gear_e;
     char angle_c;
     unsigned char distance_uc;
     unsigned char battery_voltage_uc;
@@ -78,8 +78,8 @@ typedef enum ErrStatus
 
 typedef struct ErrList
 {
-    enum ErrName errName_e;
-    enum ErrStatus errStatus_e;
+    ErrName errName_e;
+    ErrStatus errStatus_e;
     char errQualTime_c;
     char errDequalTime_c;
 } ErrList;
@@ -243,32 +243,90 @@ void CI_Write_data(int option_i, int data_i)
     fclose(data_file);
 }
 
-void RCTA_isActivRCTA(char current_ssm_state)
+unsigned char CI_getSpeed()
 {
-    Warning_Feature *RCTA_Warn = malloc(20);
-    CI_getRCTA_Warning(RCTA_Warn);
-    printf("%d %d %d\n", RCTA_Warn->audio_signal_b, RCTA_Warn->isActiv_b, RCTA_Warn->led_light_b);
-    if (messageFromFile.speed_uc <= ASL && messageFromFile.gear_e == AGS && current_ssm_state == ASS)
+    return messageFromFile.speed_uc;
+}
+void CI_setSpeed(unsigned char speedForSet_uc)
+{
+    speedForSet_uc = messageFromFile.speed_uc;
+}
+Gear CI_getGear()
+{
+    return messageFromFile.gear_e;
+}
+void CI_setGear(Gear gearForSet_e)
+{
+    gearForSet_e = messageFromFile.gear_e;
+}
+unsigned char CI_getAngle()
+{
+    return messageFromFile.angle_c;
+}
+void CI_setAngle(unsigned char angleForSet_uc)
+{
+    angleForSet_uc = messageFromFile.angle_c;
+}
+unsigned char CI_getDistance()
+{
+    return messageFromFile.distance_uc;
+}
+void CI_setDistance(unsigned char distanceForSet_uc)
+{
+    distanceForSet_uc = messageFromFile.distance_uc;
+}
+unsigned char CI_getBatteryVoltage()
+{
+    return messageFromFile.battery_voltage_uc;
+}
+void CI_setBatteryVoltage(unsigned char battery_voltageForSet_uc)
+{
+    battery_voltageForSet_uc = messageFromFile.battery_voltage_uc;
+}
+
+void CI_getCurrent_ssm_state(Ssm current_ssm_stateForGet_e)
+{
+    current_ssm_stateForGet_e = current_ssm_state;
+}
+void CI_setCurrent_ssm_state(Ssm current_ssm_stateForSet_e)
+{
+    current_ssm_state = current_ssm_stateForSet_e;
+}
+void CI_getGlobalErr_st(ErrList *globalErrForGet_st)
+{
+    globalErrForGet_st = &globalErr_st;
+}
+void CI_setGlobalErr_st(ErrList *globalErrForSet_st)
+{
+    globalErr_st = *globalErrForSet_st;
+}
+
+void RCTA_isActivRCTA(Ssm current_ssm_state)
+{
+    Warning_Feature *RCTA_isActivWarning_st = malloc(20);
+    CI_getRCTA_Warning(RCTA_isActivWarning_st);
+    printf("%d %d %d\n", RCTA_isActivWarning_st->audio_signal_b, RCTA_isActivWarning_st->isActiv_b, RCTA_isActivWarning_st->led_light_b);
+    unsigned char RCTA_speed_uc=CI_getSpeed();
+    Gear RCTA_gear_e=CI_getGear();
+    if (RCTA_speed_uc <= ASL && RCTA_gear_e == AGS && current_ssm_state == ASS)
     {
-        RCTA_Warn->isActiv_b = true;
+        RCTA_isActivWarning_st->isActiv_b = true;
     }
     else
     {
-
-        RCTA_Warn->isActiv_b = false;
+        RCTA_isActivWarning_st->isActiv_b = false;
     }
-
-    CI_setRCTA_Warning(RCTA_Warn);
-    printf("%d %d %d\n", RCTA_Warn->audio_signal_b, RCTA_Warn->isActiv_b, RCTA_Warn->led_light_b);
+    CI_setRCTA_Warning(RCTA_isActivWarning_st);
+    printf("%d %d %d\n", RCTA_isActivWarning_st->audio_signal_b, RCTA_isActivWarning_st->isActiv_b, RCTA_isActivWarning_st->led_light_b);
 
     //return RTCA_Warn.isActiv_b
 }
 
 void RCTA_colisionRCTA()
 {
-    enum Ssm current_ssm_state = 1; //aici trebuie sa apelez ceva functie de la Claudia
+    Ssm RCTA_current_ssm_state =1;//=CI_getCurrent_ssm_state();
     CI_Read_data();
-    RCTA_isActivRCTA(current_ssm_state);
+    RCTA_isActivRCTA(RCTA_current_ssm_state);
     Warning_Feature *RCTA_Warn = malloc(20);
     CI_getRCTA_Warning(RCTA_Warn);
     printf("%d %d %d\n", RCTA_Warn->audio_signal_b, RCTA_Warn->isActiv_b, RCTA_Warn->led_light_b);
@@ -282,63 +340,7 @@ void RCTA_colisionRCTA()
     printf("Led: %d\nAudio: %d", RCTA_Warn->led_light_b, RCTA_Warn->audio_signal_b);
 }
 
-unsigned char CI_getSpeed()
-{
-    return messageFromFile.speed_uc;
-}
-void CI_setSpeed(unsigned char speed)
-{
-    speed = messageFromFile.speed_uc;
-}
-unsigned char CI_getGear()
-{
-    return messageFromFile.gear_e;
-}
-void CI_setGear(unsigned char gear)
-{
-    gear = messageFromFile.gear_e;
-}
-unsigned char CI_getAngle()
-{
-    return messageFromFile.angle_c;
-}
-void CI_setAngle(unsigned char angle)
-{
-    angle = messageFromFile.angle_c;
-}
-unsigned char CI_getDistance()
-{
-    return messageFromFile.distance_uc;
-}
-void CI_setDistance(unsigned char distance)
-{
-    distance = messageFromFile.distance_uc;
-}
-unsigned char CI_getBatteryVoltage()
-{
-    return messageFromFile.battery_voltage_uc;
-}
-void CI_setBatteryVoltage(unsigned char battery_voltage)
-{
-    battery_voltage = messageFromFile.battery_voltage_uc;
-}
 
-void CI_getCurrent_ssm_state(enum Ssm current_ssm)
-{
-    current_ssm = current_ssm_state;
-}
-void CI_setCurrent_ssm_state(enum Ssm current_ssm)
-{
-    current_ssm_state = current_ssm;
-}
-void CI_getGlobalErr_st(ErrList GlobalErr)
-{
-    GlobalErr = globalErr_st;
-}
-void CI_setGlobalErr_st(ErrList GlobalErr)
-{
-    globalErr_st = GlobalErr;
-}
 int main()
 {
     //DataFromFile *messageFromFile=malloc(1);

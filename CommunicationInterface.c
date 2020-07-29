@@ -1,170 +1,207 @@
 #include "CI_Defines.h"
 
-bool getUndervoltage(){
+bool CI_getUndervoltage()
+{
     return undervoltage_b;
 }
-void setUnderVoltage(bool undervlt){
-    undervoltage_b=undervlt;
+void CI_setUnderVoltage(bool undervoltageForSet_b)
+{
+    undervoltage_b = undervoltageForSet_b;
 }
-bool getOverVoltage(){
+bool CI_getOverVoltage()
+{
     return overvoltage_b;
 }
-void serOverVoltage(bool overvlt){
-    overvoltage_b=overvlt;
-}
-void getRCTA_Warning(Warning_Feature RCTA_Warn){
-    RCTA_Warn=RCTA_Warning_st;
-}
-void setRCTA_Warning(Warning_Feature RCTA_Warn)
+void CI_serOverVoltage(bool overvoltageForSet_b)
 {
-    RCTA_Warning_st=RCTA_Warn;
+    overvoltage_b = overvoltageForSet_b;
 }
-void getLCW_Warning(Warning_Feature LCW_Warn){
-    LCW_Warn=LCW_Warning_st;
-}
-void setLCW_Warning(Warning_Feature LCW_Warn)
+bool CI_getIsFileOpen()
 {
-    LCW_Warning_st=LCW_Warn;
+    return isFileOpen_b;
+}
+void CI_setIsFileOpen(bool isFileOpenForSet_b)
+{
+    isFileOpen_b = isFileOpenForSet_b;
+}
+void CI_getRCTA_Warning(Warning_Feature *RCTA_Warning_ForSet_st)
+{
+    RCTA_Warning_ForSet_st->audio_signal_b = (&RCTA_Warning_st)->audio_signal_b;
+    RCTA_Warning_ForSet_st->isActiv_b = (&RCTA_Warning_st)->isActiv_b;
+    RCTA_Warning_ForSet_st->led_light_b = (&RCTA_Warning_st)->led_light_b;
+}
+void CI_setRCTA_Warning(Warning_Feature *RCTA_Warning_ForSet_st)
+{
+    (&RCTA_Warning_st)->audio_signal_b = RCTA_Warning_ForSet_st->audio_signal_b;
+    (&RCTA_Warning_st)->isActiv_b = RCTA_Warning_ForSet_st->isActiv_b;
+    (&RCTA_Warning_st)->led_light_b = RCTA_Warning_ForSet_st->led_light_b;
+}
+void CI_getLCW_Warning(Warning_Feature *LCW_Warning_ForSet_st)
+{
+    LCW_Warning_ForSet_st->audio_signal_b = (&LCW_Warning_st)->audio_signal_b;
+    LCW_Warning_ForSet_st->isActiv_b = (&LCW_Warning_st)->isActiv_b;
+    LCW_Warning_ForSet_st->led_light_b = (&LCW_Warning_st)->led_light_b;
+}
+void CI_setLCW_Warning(Warning_Feature *LCW_Warning_ForSet_st)
+{
+    (&LCW_Warning_st)->audio_signal_b = LCW_Warning_ForSet_st->audio_signal_b;
+    (&LCW_Warning_st)->isActiv_b = LCW_Warning_ForSet_st->isActiv_b;
+    (&LCW_Warning_st)->led_light_b = LCW_Warning_ForSet_st->led_light_b;
 }
 
-void CI_Read_data(struct DataFromFile *data_struct)//void si struct ca argum
+void CI_Read_data() //void si struct ca argum
 {
     int i = 0;
     int buffer;
+    bool isFileReadForSet = false;
     FILE *data_file = fopen("data.txt", "r");
     if (data_file == NULL)
-        printf("Fisier nedeschis");
-    while (fgets(line[i], DS, data_file))
+        isFileReadForSet = true;
+    CI_setIsFileOpen(isFileReadForSet);
+    while (fgets(lineFromFile[i], DS, data_file))
     {
-        line[i][strlen(line[i]) - 1] = '\0';
+        lineFromFile[i][strlen(lineFromFile[i]) - 1] = '\0';
         switch (i)
         {
         case (int)0:
-            buffer = atoi(line[i]);
+            buffer = atoi(lineFromFile[i]);
             if (buffer >= LSL && buffer <= USL)
-                data_struct->speed_uc = buffer;
+                messageFromFile.speed_uc = buffer;
             else
-                data_struct->speed_uc = DVS;
-            printf("Viteza: %d\n", data_struct->speed_uc);
+                messageFromFile.speed_uc = DVS;
+            printf("Viteza: %d\n", messageFromFile.speed_uc);
             break;
         case (int)1:
-            buffer = atoi(line[i]);
+            buffer = atoi(lineFromFile[i]);
             if (buffer >= LGL && buffer <= UGL)
-                data_struct->gear_e = buffer;
+                messageFromFile.gear_e = buffer;
             else
-                data_struct->gear_e = DVG;
-            printf("Gear: %d\n", data_struct->gear_e);
+                messageFromFile.gear_e = DVG;
+            printf("Gear: %d\n", messageFromFile.gear_e);
             break;
         case (int)2:
-            buffer = atoi(line[i]);
+            buffer = atoi(lineFromFile[i]);
             if (buffer >= LAL && buffer <= UAL)
-                data_struct->angle_c = buffer;
+                messageFromFile.angle_c = buffer;
             else
-                data_struct->angle_c = DVA;
-            printf("Angle: %d\n", data_struct->angle_c);
+                messageFromFile.angle_c = DVA;
+            printf("Angle: %d\n", messageFromFile.angle_c);
             break;
         case (int)3:
-            buffer = atoi(line[i]);
+            buffer = atoi(lineFromFile[i]);
             if (buffer >= LDL && buffer <= UDL)
-                data_struct->distance_uc = buffer;
+                messageFromFile.distance_uc = buffer;
             else
-                data_struct->distance_uc = DVD;
-            printf("Distance: %d\n", data_struct->distance_uc);
+                messageFromFile.distance_uc = DVD;
+            printf("Distance: %d\n", messageFromFile.distance_uc);
             break;
         case (int)4:
-            buffer = atoi(line[i]);
+            buffer = atoi(lineFromFile[i]);
             if (buffer >= LBL && buffer <= UBL)
-                data_struct->battery_voltage_uc = buffer;
+                messageFromFile.battery_voltage_uc = buffer;
             else
-                data_struct->battery_voltage_uc = DVB;
-            printf("Battery_voltage: %d\n", data_struct->battery_voltage_uc);
+                messageFromFile.battery_voltage_uc = DVB;
+            printf("Battery_voltage: %d\n", messageFromFile.battery_voltage_uc);
             break;
-            default:printf("invalid");
         }
         i++;
     }
-
     fclose(data_file);
-    //return data_struct;
+    //return messageFromFile;
 }
 
-void CI_Write_data(int option, int data)
+void CI_Write_data(int option_i, int data_i)
 {
     FILE *data_file = fopen("data.txt", "w");
     int i = 0;
-    switch (option)
+    switch (option_i)
     {
     case (int)0:
-        itoa(data, line[option], 10);
+        itoa(data_i, lineFromFile[option_i], 10);
         break;
     case (int)1:
-        itoa(data, line[option], 10);
+        itoa(data_i, lineFromFile[option_i], 10);
         break;
     case (int)2:
-        itoa(data, line[option], 10);
+        itoa(data_i, lineFromFile[option_i], 10);
         ;
         break;
     case (int)3:
-        itoa(data, line[option], 10);
+        itoa(data_i, lineFromFile[option_i], 10);
         break;
     case (int)4:
-        itoa(data, line[option], 10);
+        itoa(data_i, lineFromFile[option_i], 10);
         break;
     case (int)5:
-        itoa(data, line[option], 10);
+        itoa(data_i, lineFromFile[option_i], 10);
         break;
     case (int)6:
-        itoa(data, line[option], 10);
+        itoa(data_i, lineFromFile[option_i], 10);
         break;
     default:
         printf("Invalid Option");
     }
     for (i = 0; i < ND; i++)
     {
-        fprintf(data_file, "%s\n", line[i]);
+        fprintf(data_file, "%s\n", lineFromFile[i]);
     }
     fclose(data_file);
 }
-unsigned char getSpeed( DataFromFile *data_struct){
-    return data_struct->speed_uc;
+
+unsigned char CI_getSpeed()
+{
+    return messageFromFile.speed_uc;
 }
-void setSpeed(unsigned char speed, DataFromFile *data_struct){
-    speed=data_struct->speed_uc;
+void CI_setSpeed(unsigned char speedForSet_uc)
+{
+    speedForSet_uc = messageFromFile.speed_uc;
 }
-unsigned char getGear( DataFromFile *data_struct){
-    return data_struct->gear_e;
+Gear CI_getGear()
+{
+    return messageFromFile.gear_e;
 }
-void setGear(unsigned char gear, DataFromFile *data_struct){
-    gear=data_struct->gear_e;
+void CI_setGear(Gear gearForSet_e)
+{
+    gearForSet_e = messageFromFile.gear_e;
 }
-unsigned char getAngle( DataFromFile *data_struct){
-    return data_struct->angle_c;
+unsigned char CI_getAngle()
+{
+    return messageFromFile.angle_c;
 }
-void setAngle(unsigned char angle, DataFromFile *data_struct){
-    angle=data_struct->angle_c;
+void CI_setAngle(unsigned char angleForSet_uc)
+{
+    angleForSet_uc = messageFromFile.angle_c;
 }
-unsigned char getDistance( DataFromFile *data_struct){
-    return data_struct->distance_uc;
+unsigned char CI_getDistance()
+{
+    return messageFromFile.distance_uc;
 }
-void setDistance(unsigned char distance, DataFromFile *data_struct){
-    distance=data_struct->distance_uc;
+void CI_setDistance(unsigned char distanceForSet_uc)
+{
+    distanceForSet_uc = messageFromFile.distance_uc;
 }
-unsigned char getBatteryVoltage( DataFromFile *data_struct){
-    return data_struct->battery_voltage_uc;
+unsigned char CI_getBatteryVoltage()
+{
+    return messageFromFile.battery_voltage_uc;
 }
-void setBatteryVoltage(unsigned char battery_voltage, DataFromFile *data_struct){
-    battery_voltage=data_struct->battery_voltage_uc;
+void CI_setBatteryVoltage(unsigned char battery_voltageForSet_uc)
+{
+    battery_voltageForSet_uc = messageFromFile.battery_voltage_uc;
 }
 
-void getCurrent_ssm_state(enum Ssm current_ssm){
-    current_ssm=current_ssm_state;
+Ssm CI_getCurrent_ssm_state()
+{
+     return current_ssm_state;
 }
-void setCurrent_ssm_state(enum Ssm current_ssm){
-    current_ssm_state=current_ssm;
+void CI_setCurrent_ssm_state(Ssm current_ssm_stateForSet_e)
+{
+    current_ssm_state = current_ssm_stateForSet_e;
 }
-void getGlobalErr_st( ErrList GlobalErr){
-    GlobalErr=globalErr_st;
+void CI_getGlobalErr_st(ErrList *globalErrForGet_st)
+{
+    globalErrForGet_st = &globalErr_st;
 }
-void setGlobalErr_st( ErrList GlobalErr){
-        globalErr_st=GlobalErr;
+void CI_setGlobalErr_st(ErrList *globalErrForSet_st)
+{
+    globalErr_st = *globalErrForSet_st;
 }

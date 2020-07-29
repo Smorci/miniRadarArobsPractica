@@ -18,61 +18,64 @@
 #define DVU 1 //default value for undervoltage
 #define DVO 1 //default value for overvoltage
 
-
-
-typedef enum Gear { 
+typedef enum Gear
+{
     neutral,
     forward,
     reveresed,
     parked
-}Gear;
+} Gear;
 
 typedef struct DataFromFile
 {
     unsigned char speed_uc;
-    enum Gear gear_e;
+    Gear gear_e;
     char angle_c;
     unsigned char distance_uc;
     unsigned char battery_voltage_uc;
-    
-}DataFromFile;
 
-typedef enum Ssm{
-    init=0,
-    active=1,
-    error=2
-}Ssm;
+} DataFromFile;
 
-typedef struct Warning_Feature{
+typedef enum Ssm
+{
+    init = 0,
+    active = 1,
+    error = 2
+} Ssm;
+
+typedef struct Warning_Feature
+{
     bool isActiv_b;
     bool led_light_b;
     bool audio_signal_b;
-}Warning_Feature;
+} Warning_Feature;
 
-typedef enum ErrName{
-	err_batvoltage=0,
-	err_lostcom=1,
-	err_delimiter=2
-}ErrName;
+typedef enum ErrName
+{
+    err_batvoltage = 0,
+    err_lostcom = 1,
+    err_delimiter = 2
+} ErrName;
 
-typedef enum ErrStatus{
-    notperformed=0,
-    fail=1,
-    passed=2
-}ErrStatus;
+typedef enum ErrStatus
+{
+    notperformed = 0,
+    fail = 1,
+    passed = 2
+} ErrStatus;
 
-typedef struct ErrList{
-	enum ErrName errName_e;
-	enum ErrStatus errStatus_e;
-	char errQualTime_c;
-	char errDequalTime_c;
-}ErrList;
-
+typedef struct ErrList
+{
+    ErrName errName_e;
+    ErrStatus errStatus_e;
+    char errQualTime_c;
+    char errDequalTime_c;
+} ErrList;
 
 bool undervoltage_b;
 bool overvoltage_b;
 bool isFileOpen_b;
-Warning_Feature RCTA_Warning_st; 
+Warning_Feature RCTA_Warning_st;
 Warning_Feature LCW_Warning_st;
 ErrList globalErr_st;
 Ssm current_ssm_state;

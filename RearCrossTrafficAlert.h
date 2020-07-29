@@ -1,2 +1,2 @@
-void RCTA_isActivRCTA(struct DataFromFile *data_struct, char current_ssm_state;
-void RCTA_colisionRCTA(DataFromFile *data_struct);
+void RCTA_isActivRCTA(Ssm current_ssm_state);
+void RCTA_colisionRCTA();
