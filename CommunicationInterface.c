@@ -32,13 +32,8 @@ void CI_Read_data(struct DataFromFile *data_struct)//void si struct ca argum
     int i = 0;
     int buffer;
     FILE *data_file = fopen("data.txt", "r");
-    // if (data_file == NULL)
-    //     error_open_file = true;
-    // else
-    // {
-    //     error_open_file = false;
-    // }
-
+    if (data_file == NULL)
+        printf("Fisier nedeschis");
     while (fgets(line[i], DS, data_file))
     {
         line[i][strlen(line[i]) - 1] = '\0';
@@ -84,6 +79,7 @@ void CI_Read_data(struct DataFromFile *data_struct)//void si struct ca argum
                 data_struct->battery_voltage_uc = DVB;
             printf("Battery_voltage: %d\n", data_struct->battery_voltage_uc);
             break;
+            default:printf("invalid");
         }
         i++;
     }
@@ -128,4 +124,47 @@ void CI_Write_data(int option, int data)
         fprintf(data_file, "%s\n", line[i]);
     }
     fclose(data_file);
+}
+unsigned char getSpeed( DataFromFile *data_struct){
+    return data_struct->speed_uc;
+}
+void setSpeed(unsigned char speed, DataFromFile *data_struct){
+    speed=data_struct->speed_uc;
+}
+unsigned char getGear( DataFromFile *data_struct){
+    return data_struct->gear_e;
+}
+void setGear(unsigned char gear, DataFromFile *data_struct){
+    gear=data_struct->gear_e;
+}
+void getAngle(unsigned char angle, DataFromFile *data_struct){
+    return data_struct->angle_c;
+}
+void setAngle(unsigned char angle, DataFromFile *data_struct){
+    angle=data_struct->angle_c;
+}
+unsigned char getDistance( DataFromFile *data_struct){
+    return data_struct->distance_uc;
+}
+void setDistance(unsigned char distance, DataFromFile *data_struct){
+    distance=data_struct->distance_uc;
+}
+unsigned char getBatteryVoltage( DataFromFile *data_struct){
+    return data_struct->battery_voltage_uc;
+}
+void setBatteryVoltage(unsigned char battery_voltage, DataFromFile *data_struct){
+    battery_voltage=data_struct->battery_voltage_uc;
+}
+
+void getCurrent_ssm_state(enum Ssm current_ssm){
+    current_ssm=current_ssm_state;
+}
+void setCurrent_ssm_state(enum Ssm current_ssm){
+    current_ssm_state=current_ssm;
+}
+void getGlobalErr_st( ErrList GlobalErr){
+    GlobalErr=globalErr_st;
+}
+void setGlobalErr_st( ErrList GlobalErr){
+        globalErr_st=GlobalErr;
 }

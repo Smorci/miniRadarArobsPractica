@@ -1,0 +1,54 @@
+1.enum Gear { 
+    neutral,
+    forward,
+    reveresed,
+    parked
+};
+
+2.typedef struct DataFromFile
+{
+    unsigned char speed_uc;
+    enum Gear gear_e;
+    char angle_c;
+    unsigned char distance_uc;
+    unsigned char battery_voltage_uc;
+    
+}DataFromFile;
+
+3.enum Ssm{
+    init=0,
+    active=1,
+    error=2
+};
+
+4.typedef struct Warning_Feature{
+    bool isActiv_b;
+    bool led_light_b;
+    bool audio_signal_b;
+}Warning_Feature;
+
+5.enum ErrName{
+	err_batvoltage=0,
+	err_lostcom=1,
+	err_delimiter=2
+};
+
+6.enum ErrStatus{
+    notperformed=0,
+    fail=1,
+    passed=2
+};
+
+7.typedef struct ErrList{
+	enum ErrName errName_e;
+	enum ErrStatus errStatus_e;
+	char errQualTime_c;
+	char errDequalTime_c;
+}ErrList;
+Atribute globale:
+bool undervoltage_b;
+bool overvoltage_b;
+struct Warning_Feature RCTA_Warning_st; 
+struct Warning_Feature LCW_Warning_st;
+struct ErrList globalErr_st;
+enum Ssm current_ssm_state;

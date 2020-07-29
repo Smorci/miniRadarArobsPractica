@@ -72,3 +72,5 @@ struct Warning_Feature RCTA_Warning_st;
 struct Warning_Feature LCW_Warning_st;
 struct ErrList globalErr_st;
 enum Ssm current_ssm_state;
+
+char line[ND][DS];

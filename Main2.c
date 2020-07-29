@@ -216,59 +216,74 @@ void CI_Write_data(int option, int data)
     fclose(data_file);
 }
 
-bool RCTA_isActivRCTA(unsigned char speed, char gear, char current_ssm_state)
+void RCTA_isActivRCTA(struct DataFromFile *data_struct, char current_ssm_state)
 {
-    bool isActiv_b = false;
-    if (speed <= ASL && gear == AGS && current_ssm_state == ASS)
-        isActiv_b = true;
-    return isActiv_b;
+    Warning_Feature RCTA_Warn;
+    getRCTA_Warning(RCTA_Warn);    
+    printf("%d %d %d\n",RCTA_Warn.audio_signal_b,RCTA_Warn.isActiv_b,RCTA_Warn.led_light_b);
+    if (data_struct->speed_uc <= ASL && data_struct->gear_e == AGS && current_ssm_state == ASS)
+    {
+        RCTA_Warn.isActiv_b = true;
+    }else
+    {
+        
+        RCTA_Warn.isActiv_b=false;
+    }
+    
+    setRCTA_Warning(RCTA_Warn);
+    printf("%d %d %d\n",RCTA_Warn.audio_signal_b,RCTA_Warn.isActiv_b,RCTA_Warn.led_light_b);
+
+    //return RTCA_Warn.isActiv_b
 }
 
-void RCTA_colisionRCTA(struct DataFromFile *data_struct)
+void RCTA_colisionRCTA(DataFromFile *data_struct)
 {
     char current_ssm_state = 1; //aici trebuie sa apelez ceva functie de la Claudia
     CI_Read_data(data_struct);
-    bool isActiv_b = RCTA_isActivRCTA(data_struct->speed_uc, data_struct->gear_e, current_ssm_state);
-    struct Warning_Feature RTCA_Warn;
-    getRCTA_Warning(RTCA_Warn);
-    if (data_struct->distance_uc <= CDL && RTCA_Warn.isActiv_b== true)
+    RCTA_isActivRCTA(data_struct,current_ssm_state);
+    Warning_Feature RCTA_Warn;
+    //RCTA_Warn=RCTA_Warning_st;
+    getRCTA_Warning(RCTA_Warn);
+    printf("%d %d %d\n",RCTA_Warn.audio_signal_b,RCTA_Warn.isActiv_b,RCTA_Warn.led_light_b);
+
+    if (data_struct->distance_uc <= CDL && RCTA_Warn.isActiv_b== true)
     {
-        RTCA_Warn.audio_signal_b=true;
-        RTCA_Warn.led_light_b=true;
+        RCTA_Warn.audio_signal_b=true;
+        RCTA_Warn.led_light_b=true;
     }
-    printf("Led: %d\nAudio: %d", RTCA_Warn.led_light_b, RTCA_Warn.audio_signal_b);
+    setRCTA_Warning(RCTA_Warn);
+    printf("Led: %d\nAudio: %d", RCTA_Warn.led_light_b, RCTA_Warn.audio_signal_b);
 }
 
 
-
-unsigned char getSpeed(struct DataFromFile *data_struct){
+unsigned char getSpeed( DataFromFile *data_struct){
     return data_struct->speed_uc;
 }
-void setSpeed(unsigned char speed,struct DataFromFile *data_struct){
+void setSpeed(unsigned char speed, DataFromFile *data_struct){
     speed=data_struct->speed_uc;
 }
-unsigned char getGear(struct DataFromFile *data_struct){
+unsigned char getGear( DataFromFile *data_struct){
     return data_struct->gear_e;
 }
-void setGear(unsigned char gear,struct DataFromFile *data_struct){
+void setGear(unsigned char gear, DataFromFile *data_struct){
     gear=data_struct->gear_e;
 }
-unsigned char getAngle(struct DataFromFile *data_struct){
+void getAngle(unsigned char gear, DataFromFile *data_struct){
     return data_struct->angle_c;
 }
-void setAngle(unsigned char angle,struct DataFromFile *data_struct){
+void setAngle(unsigned char angle, DataFromFile *data_struct){
     angle=data_struct->angle_c;
 }
-unsigned char getDistance(struct DataFromFile *data_struct){
+unsigned char getDistance( DataFromFile *data_struct){
     return data_struct->distance_uc;
 }
-void setDistance(unsigned char distance,struct DataFromFile *data_struct){
+void setDistance(unsigned char distance, DataFromFile *data_struct){
     distance=data_struct->distance_uc;
 }
-unsigned char getBatteryVoltage(struct DataFromFile *data_struct){
+unsigned char getBatteryVoltage( DataFromFile *data_struct){
     return data_struct->battery_voltage_uc;
 }
-void setBatteryVoltage(unsigned char battery_voltage,struct DataFromFile *data_struct){
+void setBatteryVoltage(unsigned char battery_voltage, DataFromFile *data_struct){
     battery_voltage=data_struct->battery_voltage_uc;
 }
 
@@ -278,15 +293,15 @@ void getCurrent_ssm_state(enum Ssm current_ssm){
 void setCurrent_ssm_state(enum Ssm current_ssm){
     current_ssm_state=current_ssm;
 }
-void getGlobalErr_st(struct ErrList GlobalErr){
+void getGlobalErr_st( ErrList GlobalErr){
     GlobalErr=globalErr_st;
 }
-void setGlobalErr_st(struct ErrList GlobalErr){
+void setGlobalErr_st( ErrList GlobalErr){
         globalErr_st=GlobalErr;
 }
 int main()
 {
-    struct DataFromFile *data_struct=malloc(1);
+     DataFromFile *data_struct=malloc(1);
     CI_Read_data(data_struct);
     // for(int i=0;i<ND;i++)
     // {
@@ -309,7 +324,7 @@ int main()
     //         break;
     //     }
     // }
-    CI_Write_data(1, 3);
+    CI_Write_data(1, 2);
     CI_Read_data(data_struct);
     RCTA_colisionRCTA(data_struct);
     return 0;

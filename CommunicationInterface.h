@@ -1,10 +1,24 @@
-bool getUndervoltage()
-void setUnderVoltage(bool undervlt)
-bool getOverVoltage()
-void serOverVoltage(bool overvlt)
-void getRCTA_Warning(Warning_Feature RCTA_Warn)
-void setRCTA_Warning(Warning_Feature RCTA_Warn)
-void getLCW_Warning(Warning_Feature LCW_Warn0
-void setLCW_Warning(Warning_Feature LCW_Warn)
-void CI_Read_data(struct DataFromFile *data_struct)
+bool getUndervoltage();
+void setUnderVoltage(bool undervlt);
+bool getOverVoltage();
+void serOverVoltage(bool overvlt);
+void getRCTA_Warning(Warning_Feature RCTA_Warn);
+void setRCTA_Warning(Warning_Feature RCTA_Warn);
+void getLCW_Warning(Warning_Feature LCW_Warn);
+void setLCW_Warning(Warning_Feature LCW_Warn);
+void CI_Read_data(struct DataFromFile *data_struct);
 void CI_Write_data(int option, int data);
+unsigned char getSpeed( DataFromFile *data_struct);
+void setSpeed(unsigned char speed, DataFromFile *data_struct);
+unsigned char getGear( DataFromFile *data_struct);
+void setGear(unsigned char gear, DataFromFile *data_struct);
+void getAngle(unsigned char angle, DataFromFile *data_struct);
+void setAngle(unsigned char angle, DataFromFile *data_struct);
+unsigned char getDistance( DataFromFile *data_struct);
+void setDistance(unsigned char distance, DataFromFile *data_struct);
+unsigned char getBatteryVoltage( DataFromFile *data_struct);
+void setBatteryVoltage(unsigned char battery_voltage, DataFromFile *data_struct);
+void getCurrent_ssm_state(enum Ssm current_ssm);
+void setCurrent_ssm_state(enum Ssm current_ssm);
+void getGlobalErr_st( ErrList GlobalErr);
+void setGlobalErr_st( ErrList GlobalErr);
