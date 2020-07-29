@@ -121,7 +121,7 @@ void CI_Read_data(struct DataFromFile *data_struct)//void si struct ca argum
 {
     int i = 0;
     int buffer;
-    FILE *data_file = fopen("data.txt", "r");
+    FILE *data_file = fopen("data1.txt", "r");
     if (data_file == NULL)
         printf("Fisier nedeschis");
     while (fgets(line[i], DS, data_file))
@@ -180,7 +180,7 @@ void CI_Read_data(struct DataFromFile *data_struct)//void si struct ca argum
 
 void CI_Write_data(int option, int data)
 {
-    FILE *data_file = fopen("data.txt", "w");
+    FILE *data_file = fopen("data1.txt", "w");
     int i = 0;
     switch (option)
     {
@@ -216,28 +216,28 @@ void CI_Write_data(int option, int data)
     fclose(data_file);
 }
 
-bool RCTA_isActivRCTA(unsigned char speed, char gear, char current_ssm_state)
-{
-    bool isActiv_b = false;
-    if (speed <= ASL && gear == AGS && current_ssm_state == ASS)
-        isActiv_b = true;
-    return isActiv_b;
-}
+// bool RCTA_isActivRCTA(unsigned char speed, char gear, char current_ssm_state)
+// {
+//     bool isActiv_b = false;
+//     if (speed <= ASL && gear == AGS && current_ssm_state == ASS)
+//         isActiv_b = true;
+//     return isActiv_b;
+// }
 
-void RCTA_colisionRCTA(struct DataFromFile *data_struct)
-{
-    char current_ssm_state = 1; //aici trebuie sa apelez ceva functie de la Claudia
-    CI_Read_data(data_struct);
-    bool isActiv_b = RCTA_isActivRCTA(data_struct->speed_uc, data_struct->gear_e, current_ssm_state);
-    struct Warning_Feature RTCA_Warn;
-    getRCTA_Warning(RTCA_Warn);
-    if (data_struct->distance_uc <= CDL && RTCA_Warn.isActiv_b== true)
-    {
-        RTCA_Warn.audio_signal_b=true;
-        RTCA_Warn.led_light_b=true;
-    }
-    printf("Led: %d\nAudio: %d", RTCA_Warn.led_light_b, RTCA_Warn.audio_signal_b);
-}
+// void RCTA_colisionRCTA(struct DataFromFile *data_struct)
+// {
+//     char current_ssm_state = 1; //aici trebuie sa apelez ceva functie de la Claudia
+//     CI_Read_data(data_struct);
+//     bool isActiv_b = RCTA_isActivRCTA(data_struct->speed_uc, data_struct->gear_e, current_ssm_state);
+//     struct Warning_Feature RTCA_Warn;
+//     getRCTA_Warning(RTCA_Warn);
+//     if (data_struct->distance_uc <= CDL && RTCA_Warn.isActiv_b== true)
+//     {
+//         RTCA_Warn.audio_signal_b=true;
+//         RTCA_Warn.led_light_b=true;
+//     }
+//     printf("Led: %d\nAudio: %d", RTCA_Warn.led_light_b, RTCA_Warn.audio_signal_b);
+// }
 
 
 
@@ -286,7 +286,7 @@ void setGlobalErr_st(struct ErrList GlobalErr){
 }
 int main()
 {
-    struct DataFromFile *data_struct=malloc(1);
+    struct DataFromFile *data_struct;
     CI_Read_data(data_struct);
     // for(int i=0;i<ND;i++)
     // {
@@ -309,8 +309,8 @@ int main()
     //         break;
     //     }
     // }
-    CI_Write_data(1, 3);
-    CI_Read_data(data_struct);
-    RCTA_colisionRCTA(data_struct);
+    //CI_Write_data(1, 1);
+    //CI_Read_data(data_struct);
+    //RCTA_colisionRCTA(data_struct);
     return 0;
 }
