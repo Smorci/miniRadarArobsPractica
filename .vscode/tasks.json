@@ -6,7 +6,10 @@
         {
             "label": "echo",
             "type": "shell",
-            "command": "gcc"
+            "command": "gcc",
+            "args":[
+                "laneChangeWarning.cpp","systemStateMachine.cpp","scheduler.c"
+            ]
         }
     ]
 }
