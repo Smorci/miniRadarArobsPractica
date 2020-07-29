@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "definesLCW.h"
 
-extern bool laneChangeWarning_check_param(unsigned char speed_uc, enum gear_poz gear_e, char angle_c, enum ssm_states current_ssm_state_e){
+bool laneChangeWarning_check_param(unsigned char speed_uc, gear_poz gear_e, char angle_c, ssm_states current_ssm_state_e){
     bool param_passed_u = CONDITION_NOT_PASSED_U;
     if(speed_uc <= MIN_SPPED_U){
         param_passed_u = CONDITION_NOT_PASSED_U;
@@ -23,7 +23,7 @@ extern bool laneChangeWarning_check_param(unsigned char speed_uc, enum gear_poz 
     return param_passed_u;
 }
 
-extern bool laneChangeWarning_set_lcw_state(unsigned char speed_uc, enum gear_poz gear_e, char angle_c, enum ssm_states current_ssm_state_e){
+bool laneChangeWarning_set_lcw_state(unsigned char speed_uc, gear_poz gear_e, char angle_c, ssm_states current_ssm_state_e){
     bool current_lcw_state_b = LCW_PASSIVE_U;
     bool check_b = laneChangeWarning_check_param(speed_uc,gear_e,angle_c,current_ssm_state_e);
     printf("chek_param returned: %d\n",check_b);
@@ -45,7 +45,7 @@ extern bool laneChangeWarning_set_lcw_state(unsigned char speed_uc, enum gear_po
     
 }
 
-extern void laneChangeWarning_check_colision(bool current_lcw_state_b, char distance_c, bool *led_light_b, bool *audio_signal_b){
+void laneChangeWarning_check_colision(bool current_lcw_state_b, char distance_c, bool *led_light_b, bool *audio_signal_b){
     if(current_lcw_state_b == LCW_PASSIVE_U){
         *led_light_b=0;
         *audio_signal_b=0;

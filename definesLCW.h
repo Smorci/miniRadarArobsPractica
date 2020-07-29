@@ -8,14 +8,14 @@
 #define CONDITION_NOT_PASSED_U 0
 #define RANGE_LCW_U 20
 
-enum gear_poz{
+typedef enum gear_poz{
     neutral,
     forward,
     reveresed,
     parked
-};
-enum ssm_states{
+}gear_poz;
+typedef enum ssm_states{
     INIT,
     ACTIVE,
     ERROR
-};
+}ssm_states;
