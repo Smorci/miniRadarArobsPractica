@@ -18,12 +18,14 @@
 #define DVU 1 //default value for undervoltage
 #define DVO 1 //default value for overvoltage
 
-enum Gear { 
+
+
+typedef enum Gear { 
     neutral,
     forward,
     reveresed,
     parked
-};
+}Gear;
 
 typedef struct DataFromFile
 {
@@ -35,11 +37,11 @@ typedef struct DataFromFile
     
 }DataFromFile;
 
-enum Ssm{
+typedef enum Ssm{
     init=0,
     active=1,
     error=2
-};
+}Ssm;
 
 typedef struct Warning_Feature{
     bool isActiv_b;
@@ -47,17 +49,17 @@ typedef struct Warning_Feature{
     bool audio_signal_b;
 }Warning_Feature;
 
-enum ErrName{
+typedef enum ErrName{
 	err_batvoltage=0,
 	err_lostcom=1,
 	err_delimiter=2
-};
+}ErrName;
 
-enum ErrStatus{
+typedef enum ErrStatus{
     notperformed=0,
     fail=1,
     passed=2
-};
+}ErrStatus;
 
 typedef struct ErrList{
 	enum ErrName errName_e;
@@ -66,11 +68,14 @@ typedef struct ErrList{
 	char errDequalTime_c;
 }ErrList;
 
+
 bool undervoltage_b;
 bool overvoltage_b;
-struct Warning_Feature RCTA_Warning_st; 
-struct Warning_Feature LCW_Warning_st;
-struct ErrList globalErr_st;
-enum Ssm current_ssm_state;
+bool isFileOpen_b;
+Warning_Feature RCTA_Warning_st; 
+Warning_Feature LCW_Warning_st;
+ErrList globalErr_st;
+Ssm current_ssm_state;
+DataFromFile messageFromFile;
 
-char line[ND][DS];
+char lineFromFile[ND][DS];

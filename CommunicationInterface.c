@@ -137,7 +137,7 @@ unsigned char getGear( DataFromFile *data_struct){
 void setGear(unsigned char gear, DataFromFile *data_struct){
     gear=data_struct->gear_e;
 }
-void getAngle(unsigned char angle, DataFromFile *data_struct){
+unsigned char getAngle( DataFromFile *data_struct){
     return data_struct->angle_c;
 }
 void setAngle(unsigned char angle, DataFromFile *data_struct){
