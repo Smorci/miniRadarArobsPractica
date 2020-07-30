@@ -16,27 +16,28 @@ const char* getStateName(Ssm crt_state)
    }
 }
 
-bool systemStateMachine_check_err_val(ErrList err_vect_st[]){
+bool systemStateMachine_check_err_val(ErrStatus err_vect_e[]){
     bool err_existence_b = NO_ERROR_OCURED_U;
-    if (err_vect_st[0].errStatus_e==fail){
+    if (err_vect_e[0]==fail){
         err_existence_b = ERROR_OCURED_U;
     }
-    else if(err_vect_st[1].errStatus_e==fail){
+    else if(err_vect_e[1]==fail){
         err_existence_b =ERROR_OCURED_U;
+        //printf("nu comunic\n");
     }
-    else if(err_vect_st[2].errStatus_e==fail){
-        err_existence_b =ERROR_OCURED_U;
-    }
+    // else if(err_vect_st[2].errStatus_e==fail){
+    //     err_existence_b =ERROR_OCURED_U;
+    // }
     else{
         err_existence_b=NO_ERROR_OCURED_U;
     }
     return err_existence_b;
 }
 
-Ssm systemStateMachine_change_state(ErrList err_vect_st[],int *myTrigger_i){
+Ssm systemStateMachine_change_state(ErrStatus err_vect_e[],int *myTrigger_i){
     Ssm current_state_e = init;
-    bool err_exist_b = systemStateMachine_check_err_val(err_vect_st);
-
+    bool err_exist_b = systemStateMachine_check_err_val(err_vect_e);
+    printf("err_exist_b: %d",err_exist_b);
     //printf("Trrigger: %d\n",*myTrigger_i);
     if((*myTrigger_i) == 0){
         if(err_exist_b == ERROR_OCURED_U){
@@ -48,7 +49,8 @@ Ssm systemStateMachine_change_state(ErrList err_vect_st[],int *myTrigger_i){
     }
     else{
         (*myTrigger_i)--;
-        err_exist_b = systemStateMachine_check_err_val(err_vect_st);
+        current_state_e = init;
+       // err_exist_b = systemStateMachine_check_err_val(err_vect_st);
     }
     
     printf("State is: %s\n", getStateName(current_state_e));

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "CI_Defines.h"
-
+bool isFileReadForSet;
 bool CI_getUndervoltage()
 {
     return undervoltage_b;
@@ -58,11 +58,13 @@ void CI_Read_data() //void si struct ca argum
 {
     int i = 0;
     int buffer;
-    bool isFileReadForSet = false;
+    isFileReadForSet =true;
     FILE *data_file = fopen("data.txt", "r");
-    if (data_file == NULL)
-        isFileReadForSet = true;
-    CI_setIsFileOpen(isFileReadForSet);
+    if (data_file == NULL){
+        isFileReadForSet = false;
+        printf("File open: %d\n", isFileReadForSet);
+    }
+    CI_setIsFileOpen(isFileReadForSet); 
     while (fgets(lineFromFile[i], DS, data_file))
     {
         lineFromFile[i][strlen(lineFromFile[i]) - 1] = '\0';
@@ -202,23 +204,23 @@ void CI_setCurrent_ssm_state(Ssm current_ssm_stateForSet_e)
 {
     current_ssm_state = current_ssm_stateForSet_e;
 }
-void CI_getGlobalErr_st(ErrList globalErrForGet_st[])
-{
-    for(int i=0; i<3; i++){
-        globalErrForGet_st[i].errDequalTime_c = globalErr_st[i].errDequalTime_c;
-        globalErrForGet_st[i].errName_e = globalErr_st[i].errName_e;
-        globalErrForGet_st[i].errQualTime_c = globalErr_st[i].errQualTime_c;
-        globalErrForGet_st[i].errStatus_e = globalErr_st[i].errStatus_e;
-    }
-   // globalErrForGet_st = globalErr_st;
-}
-void CI_setGlobalErr_st(ErrList globalErrForSet_st[])
-{
-    for(int i=0; i<3; i++){
-        globalErr_st[i].errDequalTime_c = globalErrForSet_st[i].errDequalTime_c;
-        globalErr_st[i].errName_e = globalErrForSet_st[i].errName_e;
-        globalErr_st[i].errQualTime_c = globalErrForSet_st[i].errQualTime_c;
-        globalErr_st[i].errStatus_e = globalErrForSet_st[i].errStatus_e;
-    }
-    //globalErr_st = globalErrForSet_st;
-}
+// void CI_getGlobalErr_st(ErrList *globalErrForGet_st)
+// {
+//     for(int i=0; i<err_delimiter; i++){
+//         (globalErrForGet_st +i)->errDequalTime_c = globalErr_st[i].errDequalTime_c;
+//         (globalErrForGet_st +i)->errName_e = globalErr_st[i].errName_e;
+//         (globalErrForGet_st +i)->errQualTime_c = globalErr_st[i].errQualTime_c;
+//         (globalErrForGet_st +i)->errStatus_e = globalErr_st[i].errStatus_e;
+//     }
+//    // globalErrForGet_st = globalErr_st;
+// }
+// void CI_setGlobalErr_st(ErrList *globalErrForSet_st)
+// {
+//     for(int i=0; i<2; i++){
+//         (globalErr_st +i)->errDequalTime_c = globalErrForSet_st[i].errDequalTime_c;
+//         (globalErr_st[i].errName_e = globalErrForSet_st[i].errName_e;
+//         (globalErr_st[i].errQualTime_c = globalErrForSet_st[i].errQualTime_c;
+//         (globalErr_st[i].errStatus_e = globalErrForSet_st[i].errStatus_e;
+//     }
+//     //globalErr_st = globalErrForSet_st;
+// }
