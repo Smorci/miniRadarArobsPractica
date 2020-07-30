@@ -17,7 +17,7 @@ bool CI_getOverVoltage()
 {
     return overvoltage_b;
 }
-void CI_serOverVoltage(bool overvoltageForSet_b)
+void CI_setOverVoltage(bool overvoltageForSet_b)
 {
     overvoltage_b = overvoltageForSet_b;
 }
@@ -202,11 +202,23 @@ void CI_setCurrent_ssm_state(Ssm current_ssm_stateForSet_e)
 {
     current_ssm_state = current_ssm_stateForSet_e;
 }
-void CI_getGlobalErr_st(ErrList *globalErrForGet_st)
+void CI_getGlobalErr_st(ErrList globalErrForGet_st[])
 {
-    globalErrForGet_st = &globalErr_st;
+    for(int i=0; i<3; i++){
+        globalErrForGet_st[i].errDequalTime_c = globalErr_st[i].errDequalTime_c;
+        globalErrForGet_st[i].errName_e = globalErr_st[i].errName_e;
+        globalErrForGet_st[i].errQualTime_c = globalErr_st[i].errQualTime_c;
+        globalErrForGet_st[i].errStatus_e = globalErr_st[i].errStatus_e;
+    }
+   // globalErrForGet_st = globalErr_st;
 }
-void CI_setGlobalErr_st(ErrList *globalErrForSet_st)
+void CI_setGlobalErr_st(ErrList globalErrForSet_st[])
 {
-    globalErr_st = *globalErrForSet_st;
+    for(int i=0; i<3; i++){
+        globalErr_st[i].errDequalTime_c = globalErrForSet_st[i].errDequalTime_c;
+        globalErr_st[i].errName_e = globalErrForSet_st[i].errName_e;
+        globalErr_st[i].errQualTime_c = globalErrForSet_st[i].errQualTime_c;
+        globalErr_st[i].errStatus_e = globalErrForSet_st[i].errStatus_e;
+    }
+    //globalErr_st = globalErrForSet_st;
 }

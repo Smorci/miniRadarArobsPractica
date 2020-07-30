@@ -37,7 +37,7 @@ Ssm systemStateMachine_change_state(ErrList err_vect_st[],int *myTrigger_i){
     Ssm current_state_e = init;
     bool err_exist_b = systemStateMachine_check_err_val(err_vect_st);
 
-    printf("Trrigger: %d\n",*myTrigger_i);
+    //printf("Trrigger: %d\n",*myTrigger_i);
     if((*myTrigger_i) == 0){
         if(err_exist_b == ERROR_OCURED_U){
             current_state_e = error;

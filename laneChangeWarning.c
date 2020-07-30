@@ -28,7 +28,7 @@ bool laneChangeWarning_check_param(unsigned char speed_uc, Gear gear_e, char ang
 bool laneChangeWarning_set_lcw_state(unsigned char speed_uc, Gear gear_e, char angle_c, Ssm current_ssm_state_e){
     bool current_lcw_state_b = LCW_PASSIVE_U;
     bool check_b = laneChangeWarning_check_param(speed_uc,gear_e,angle_c,current_ssm_state_e);
-    printf("chek_param returned: %d\n",check_b);
+    //printf("chek_param returned: %d\n",check_b);
 
     if(check_b == CONDITION_NOT_PASSED_U){
         current_lcw_state_b = LCW_PASSIVE_U;
@@ -42,7 +42,7 @@ bool laneChangeWarning_set_lcw_state(unsigned char speed_uc, Gear gear_e, char a
     //}while(check_b == 1);
 
    //current_lcw_state_b = LCW_PASSIVE;
-   printf("LCW state is: %d\n",current_lcw_state_b);
+   //printf("LCW state is: %d\n",current_lcw_state_b);
    return current_lcw_state_b;
     
 }

@@ -7,6 +7,7 @@
 #include "CI_Defines.h"
 #include "CommunicationInterface.h"
 #include "RearCrossTrafficAlert.h"
+#include "error_functions.h"
 #include <time.h>
 //#include "myDefines.h"
 
@@ -21,10 +22,10 @@ int main(){
     Warning_Feature rctaWarn_st;
     unsigned char msec_uc = 0, trigger_uc = 10; /* 10ms */
     clock_t before = clock();
-    ErrList err_st[3];
-    err_st[0].errQualTime_c=2; err_st[0].errDequalTime_c =5; err_st[0].errName_e=err_lostcom; err_st[0].errStatus_e=passed;
-    err_st[1].errQualTime_c=1; err_st[1].errDequalTime_c =4; err_st[1].errName_e=err_batvoltage; err_st[1].errStatus_e=passed; 
-    err_st[2].errQualTime_c=3; err_st[2].errDequalTime_c =7; err_st[2].errName_e=err_lostcom; err_st[2].errStatus_e=passed; 
+    ErrList MYerr_st[3];
+    // MYerr_st[0].errQualTime_c=2; MYerr_st[0].errDequalTime_c =5; MYerr_st[0].errName_e=err_lostcom; MYerr_st[0].errStatus_e=passed;
+    // MYerr_st[1].errQualTime_c=1; MYerr_st[1].errDequalTime_c =4; MYerr_st[1].errName_e=err_batvoltage; MYerr_st[1].errStatus_e=passed; 
+    // MYerr_st[2].errQualTime_c=3; MYerr_st[2].errDequalTime_c =7; MYerr_st[2].errName_e=err_lostcom; MYerr_st[2].errStatus_e=passed; 
     while(x<550){
         iterations_uc=0;
         do {
@@ -34,7 +35,10 @@ int main(){
         }while ( msec_uc < trigger_uc );  
 
         CI_Read_data();
-        Ssm crt_smm_state = systemStateMachine_change_state(err_st,&myTrigger_i);
+        errorHandler_BatteryVoltage_Check();
+        errorHandler_Communication_Check();
+        CI_getGlobalErr_st(MYerr_st);
+        Ssm crt_smm_state = systemStateMachine_change_state(MYerr_st,&myTrigger_i);
         CI_setCurrent_ssm_state(crt_smm_state);
         unsigned char mySpeed_uc = CI_getSpeed();
         Gear myGear_e = CI_getGear();

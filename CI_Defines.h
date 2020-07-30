@@ -87,7 +87,7 @@ bool overvoltage_b;
 bool isFileOpen_b;
 Warning_Feature RCTA_Warning_st;
 Warning_Feature LCW_Warning_st;
-ErrList globalErr_st;
+ErrList globalErr_st[3];
 Ssm current_ssm_state;
 DataFromFile messageFromFile;
 

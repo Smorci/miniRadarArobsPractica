@@ -4,7 +4,7 @@
 bool CI_getUndervoltage();
 void CI_setUnderVoltage(bool undervoltageForSet_b);
 bool CI_getOverVoltage();
-void CI_serOverVoltage(bool overvoltageForSet_b);
+void CI_setOverVoltage(bool overvoltageForSet_b);
 bool CI_getIsFileOpen();
 void CI_setIsFileOpen(bool isFileOpenForSet_b);
 void CI_getRCTA_Warning(Warning_Feature *RCTA_Warning_ForSet_st);
@@ -25,5 +25,5 @@ unsigned char CI_getBatteryVoltage();
 void CI_setBatteryVoltage(unsigned char battery_voltageForSet_uc);
 Ssm CI_getCurrent_ssm_state();
 void CI_setCurrent_ssm_state(Ssm current_ssm_stateForSet_e);
-void CI_getGlobalErr_st(ErrList *globalErrForGet_st);
-void CI_setGlobalErr_st(ErrList *globalErrForSet_st);
+void CI_getGlobalErr_st(ErrList globalErrForGet_st[]);
+void CI_setGlobalErr_st(ErrList globalErrForSet_st[]);
