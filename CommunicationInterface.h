@@ -1,3 +1,4 @@
+
 #include "CI_Defines.h"
 
 bool CI_getUndervoltage();
@@ -10,8 +11,8 @@ void CI_getRCTA_Warning(Warning_Feature *RCTA_Warning_ForSet_st);
 void CI_setRCTA_Warning(Warning_Feature *RCTA_Warning_ForSet_st);
 void CI_getLCW_Warning(Warning_Feature *LCW_Warning_ForSet_st);
 void CI_setLCW_Warning(Warning_Feature *LCW_Warning_ForSet_st);
-void CI_Read_data();
-void CI_Write_data(int option_i, int data_i);
+ void CI_Read_data();
+ void CI_Write_data(int option_i, int data_i);
 unsigned char CI_getSpeed();
 void CI_setSpeed(unsigned char speedForSet_uc);
 Gear CI_getGear();

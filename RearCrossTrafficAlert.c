@@ -1,5 +1,11 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "RCTA_Defines.h"
 #include "CommunicationInterface.h"
+
 
 void RCTA_isActivRCTA(Ssm current_ssm_state)
 {

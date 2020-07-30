@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "CI_Defines.h"
 
 bool CI_getUndervoltage()

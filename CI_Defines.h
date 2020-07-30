@@ -1,3 +1,12 @@
+#ifndef CI_DEFINES
+#define CI_DEFINES
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define DS 5 //data size
 #define ND 5//number of data
 #define LSL 0//lower speed limit
@@ -18,6 +27,7 @@
 #define DVU 1 //default value for undervoltage
 #define DVO 1 //default value for overvoltage
 
+//#pragma once
 typedef enum Gear
 {
     neutral,
@@ -29,7 +39,7 @@ typedef enum Gear
 typedef struct DataFromFile
 {
     unsigned char speed_uc;
-    Gear gear_e;
+     Gear gear_e;
     char angle_c;
     unsigned char distance_uc;
     unsigned char battery_voltage_uc;
@@ -82,3 +92,4 @@ Ssm current_ssm_state;
 DataFromFile messageFromFile;
 
 char lineFromFile[ND][DS];
+#endif
