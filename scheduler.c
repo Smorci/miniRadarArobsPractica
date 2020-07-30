@@ -1,24 +1,30 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "laneChangeWarning.h"
 #include "systemStateMachine.h"
+#include "CI_Defines.h"
+#include "CommunicationInterface.h"
+#include "RearCrossTrafficAlert.h"
 #include <time.h>
 //#include "myDefines.h"
 
 
 int main(){
     int x=0;
-    bool led_light_lcw_b =0;
-    bool audio_signal_lcw_b=0;
+    bool led_b =0;
+    bool audio_b=0;
     int myTrigger_i = 500; /* 10ms task * 500 = 5s */
     unsigned char iterations_uc =0;
+    Warning_Feature lcwWarn_st;
+    Warning_Feature rctaWarn_st;
     unsigned char msec_uc = 0, trigger_uc = 10; /* 10ms */
     clock_t before = clock();
-    Errors err_st[3];
-    err_st[0].q_time_i=2; err_st[0].dq_time_i =5; err_st[0].errName=err_lostCom; err_st[0].err_val=passed;
-    err_st[1].q_time_i=1; err_st[1].dq_time_i =4; err_st[1].errName=err_batVoltage; err_st[1].err_val=passed; 
-    err_st[2].q_time_i=3; err_st[2].dq_time_i =7; err_st[2].errName=err_lostCom; err_st[2].err_val=passed; 
+    ErrList err_st[3];
+    err_st[0].errQualTime_c=2; err_st[0].errDequalTime_c =5; err_st[0].errName_e=err_lostcom; err_st[0].errStatus_e=passed;
+    err_st[1].errQualTime_c=1; err_st[1].errDequalTime_c =4; err_st[1].errName_e=err_batvoltage; err_st[1].errStatus_e=passed; 
+    err_st[2].errQualTime_c=3; err_st[2].errDequalTime_c =7; err_st[2].errName_e=err_lostcom; err_st[2].errStatus_e=passed; 
     while(x<550){
         iterations_uc=0;
         do {
@@ -27,11 +33,22 @@ int main(){
             iterations_uc++;
         }while ( msec_uc < trigger_uc );  
 
-        enum ssm_states current_smm_state = systemStateMachine_change_state(err_st,&myTrigger_i);
+        CI_Read_data();
+        Ssm crt_smm_state = systemStateMachine_change_state(err_st,&myTrigger_i);
+        CI_setCurrent_ssm_state(crt_smm_state);
+        unsigned char mySpeed_uc = CI_getSpeed();
+        Gear myGear_e = CI_getGear();
+        char myAngle_c = CI_getAngle();
+        unsigned char myDist_uc = CI_getDistance();
         bool check_rez_b = 0;
-        check_rez_b = laneChangeWarning_set_lcw_state(21,1,10,current_smm_state);
-        laneChangeWarning_check_colision(check_rez_b,10,&led_light_lcw_b,&audio_signal_lcw_b);
-        printf("Led: %d and Audio: %d\n",led_light_lcw_b,audio_signal_lcw_b);
+        check_rez_b = laneChangeWarning_set_lcw_state(mySpeed_uc,myGear_e,myAngle_c,crt_smm_state);
+        laneChangeWarning_check_colision(check_rez_b,myDist_uc);
+        RCTA_colisionRCTA();
+        CI_getLCW_Warning(&lcwWarn_st);
+        CI_getRCTA_Warning(&rctaWarn_st);
+        led_b = lcwWarn_st.led_light_b || rctaWarn_st.led_light_b;
+        audio_b = lcwWarn_st.audio_signal_b || rctaWarn_st.audio_signal_b;
+        printf("Led Fin: %d and Audio Fin: %d\n",led_b,audio_b);
         x++;
     }
     
