@@ -82,14 +82,12 @@ typedef struct ErrList
     char errDequalTime_c;
 } ErrList;
 
-bool undervoltage_b;
-bool overvoltage_b;
-bool isFileOpen_b;
-Warning_Feature RCTA_Warning_st;
-Warning_Feature LCW_Warning_st;
-//ErrList globalErr_st[2];
-Ssm current_ssm_state;
-DataFromFile messageFromFile;
-
-char lineFromFile[ND][DS];
+// bool undervoltage_b;
+// bool overvoltage_b;
+// bool isFileOpen_b;
+// Warning_Feature RCTA_Warning_st;
+// Warning_Feature LCW_Warning_st;
+// Ssm current_ssm_state;
+// DataFromFile messageFromFile;
+// char lineFromFile[ND][DS];
 #endif

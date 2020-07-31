@@ -3,8 +3,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "CI_Defines.h"
-bool isFileReadForSet;
+
+bool undervoltage_b;
+bool overvoltage_b;
+bool isFileOpen_b;
+Warning_Feature RCTA_Warning_st;
+Warning_Feature LCW_Warning_st;
+Ssm current_ssm_state;
+DataFromFile messageFromFile;
+char lineFromFile[ND][DS];
+
 bool CI_getUndervoltage()
 {
     return undervoltage_b;
@@ -53,68 +63,98 @@ void CI_setLCW_Warning(Warning_Feature *LCW_Warning_ForSet_st)
     (&LCW_Warning_st)->isActiv_b = LCW_Warning_ForSet_st->isActiv_b;
     (&LCW_Warning_st)->led_light_b = LCW_Warning_ForSet_st->led_light_b;
 }
-
-void CI_Read_data() //void si struct ca argum
+bool CI_isNumber(char line[DS])
 {
+    for (int i = 0; i < strlen(line); i++)
+    {
+        if (isdigit(line[i]))
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+void CI_Read_data()
+{
+    bool isFileReadForSet;
     int i = 0;
-    int buffer;
-    isFileReadForSet =true;
+    int buffer=0;
+    isFileReadForSet = true;
     FILE *data_file = fopen("data.txt", "r");
-    if (data_file == NULL){
+    if (data_file == NULL)
+    {
         isFileReadForSet = false;
         printf("File open: %d\n", isFileReadForSet);
     }
-    CI_setIsFileOpen(isFileReadForSet); 
-    while (fgets(lineFromFile[i], DS, data_file))
+    else
     {
-        lineFromFile[i][strlen(lineFromFile[i]) - 1] = '\0';
-        switch (i)
+        while (fgets(lineFromFile[i], DS, data_file))
         {
-        case (int)0:
-            buffer = atoi(lineFromFile[i]);
-            if (buffer >= LSL && buffer <= USL)
-                messageFromFile.speed_uc = buffer;
-            else
-                messageFromFile.speed_uc = DVS;
-            printf("Viteza: %d\n", messageFromFile.speed_uc);
-            break;
-        case (int)1:
-            buffer = atoi(lineFromFile[i]);
-            if (buffer >= LGL && buffer <= UGL)
-                messageFromFile.gear_e = buffer;
-            else
-                messageFromFile.gear_e = DVG;
-            printf("Gear: %d\n", messageFromFile.gear_e);
-            break;
-        case (int)2:
-            buffer = atoi(lineFromFile[i]);
-            if (buffer >= LAL && buffer <= UAL)
-                messageFromFile.angle_c = buffer;
-            else
-                messageFromFile.angle_c = DVA;
-            printf("Angle: %d\n", messageFromFile.angle_c);
-            break;
-        case (int)3:
-            buffer = atoi(lineFromFile[i]);
-            if (buffer >= LDL && buffer <= UDL)
-                messageFromFile.distance_uc = buffer;
-            else
-                messageFromFile.distance_uc = DVD;
-            printf("Distance: %d\n", messageFromFile.distance_uc);
-            break;
-        case (int)4:
-            buffer = atoi(lineFromFile[i]);
-            if (buffer >= LBL && buffer <= UBL)
-                messageFromFile.battery_voltage_uc = buffer;
-            else
-                messageFromFile.battery_voltage_uc = DVB;
-            printf("Battery_voltage: %d\n", messageFromFile.battery_voltage_uc);
-            break;
+            lineFromFile[i][strlen(lineFromFile[i]) - 1] = '\0';
+            switch (i)
+            {
+            case (int)0:
+                if (CI_isNumber(lineFromFile[i]))
+                    buffer = atoi(lineFromFile[i]);
+                else
+                    buffer = DVS;
+                if (buffer >= LSL && buffer <= USL)
+                    messageFromFile.speed_uc = buffer;
+                else
+                    messageFromFile.speed_uc = DVS;
+                printf("Viteza: %d\n", messageFromFile.speed_uc);
+                break;
+            case (int)1:
+                if (CI_isNumber(lineFromFile[i]))
+                    buffer = atoi(lineFromFile[i]);
+                else
+                    buffer = DVG;
+                if (buffer >= LGL && buffer <= UGL)
+                    messageFromFile.gear_e = buffer;
+                else
+                    messageFromFile.gear_e = DVG;
+                printf("Gear: %d\n", messageFromFile.gear_e);
+                break;
+            case (int)2:
+                if (CI_isNumber(lineFromFile[i]))
+                    buffer = atoi(lineFromFile[i]);
+                else
+                    buffer = DVA;
+                if (buffer >= LAL && buffer <= UAL)
+                    messageFromFile.angle_c = buffer;
+                else
+                    messageFromFile.angle_c = DVA;
+                printf("Angle: %d\n", messageFromFile.angle_c);
+                break;
+            case (int)3:
+                if (CI_isNumber(lineFromFile[i]))
+                    buffer = atoi(lineFromFile[i]);
+                else
+                    buffer = DVD;
+                if (buffer >= LDL && buffer <= UDL)
+                    messageFromFile.distance_uc = buffer;
+                else
+                    messageFromFile.distance_uc = DVD;
+                printf("Distance: %d\n", messageFromFile.distance_uc);
+                break;
+            case (int)4:
+                if (CI_isNumber(lineFromFile[i]))
+                    buffer = atoi(lineFromFile[i]);
+                else
+                    buffer = DVB;
+                if (buffer >= LBL && buffer <= UBL)
+                    messageFromFile.battery_voltage_uc = buffer;
+                else
+                    messageFromFile.battery_voltage_uc = DVB;
+                printf("Battery_voltage: %d\n", messageFromFile.battery_voltage_uc);
+                break;
+            }
+            //printf("buffer: %d  line: %s \n", buffer, lineFromFile[i]);
+            i++;
         }
-        i++;
     }
+    CI_setIsFileOpen(isFileReadForSet);
     fclose(data_file);
-    //return messageFromFile;
 }
 
 void CI_Write_data(int option_i, int data_i)
@@ -198,29 +238,9 @@ void CI_setBatteryVoltage(unsigned char battery_voltageForSet_uc)
 
 Ssm CI_getCurrent_ssm_state()
 {
-     return current_ssm_state;
+    return current_ssm_state;
 }
 void CI_setCurrent_ssm_state(Ssm current_ssm_stateForSet_e)
 {
     current_ssm_state = current_ssm_stateForSet_e;
 }
-// void CI_getGlobalErr_st(ErrList *globalErrForGet_st)
-// {
-//     for(int i=0; i<err_delimiter; i++){
-//         (globalErrForGet_st +i)->errDequalTime_c = globalErr_st[i].errDequalTime_c;
-//         (globalErrForGet_st +i)->errName_e = globalErr_st[i].errName_e;
-//         (globalErrForGet_st +i)->errQualTime_c = globalErr_st[i].errQualTime_c;
-//         (globalErrForGet_st +i)->errStatus_e = globalErr_st[i].errStatus_e;
-//     }
-//    // globalErrForGet_st = globalErr_st;
-// }
-// void CI_setGlobalErr_st(ErrList *globalErrForSet_st)
-// {
-//     for(int i=0; i<2; i++){
-//         (globalErr_st +i)->errDequalTime_c = globalErrForSet_st[i].errDequalTime_c;
-//         (globalErr_st[i].errName_e = globalErrForSet_st[i].errName_e;
-//         (globalErr_st[i].errQualTime_c = globalErrForSet_st[i].errQualTime_c;
-//         (globalErr_st[i].errStatus_e = globalErrForSet_st[i].errStatus_e;
-//     }
-//     //globalErr_st = globalErrForSet_st;
-// }

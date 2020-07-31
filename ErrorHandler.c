@@ -52,7 +52,7 @@ void errorHandler_BatteryVoltage_Check(){
     
     // underV , overV detection
     printf("BV: %d\n",Battery_Voltage_UC);
-    if(Battery_Voltage_UC < 8) {
+    if(Battery_Voltage_UC < LOWER_VOLTAGE_LIMIT_C) {
         if(underOverVoltageTimer_u8 == RUNOUT_TIMER_UI)
         {
             underOverVoltageTimer_u8 = QUAL_TIME_UI;
