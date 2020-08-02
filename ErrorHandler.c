@@ -40,18 +40,26 @@ void errorHandler_BatteryVoltage_Check(){
     if(timer_u8 == RUNOUT_TIMER_UI)
     {
         Battery_Voltage_UC = CI_getBatteryVoltage();
-        printf("Battery voltage from EH: %d\n",Battery_Voltage_UC);
+        #ifdef DEBUG
+            printf("Battery voltage from EH: %d\n",Battery_Voltage_UC);
+        #endif
         timer_u8 = BATTERY_CYCLE_TIMER_UI;
-        printf("battery voltage read\n");
+        #ifdef DEBUG
+            printf("battery voltage read\n");
+        #endif
     }
     else
     {
         timer_u8--;
-        printf("cnt for read\n");
+        #ifdef DEBUG
+            printf("cnt for read\n");
+        #endif
     }
     
     // underV , overV detection
-    printf("BV: %d\n",Battery_Voltage_UC);
+    #ifdef DEBUG
+        printf("BV: %d\n",Battery_Voltage_UC);
+    #endif
     if(Battery_Voltage_UC < LOWER_VOLTAGE_LIMIT_C) {
         if(underOverVoltageTimer_u8 == RUNOUT_TIMER_UI)
         {
@@ -60,12 +68,16 @@ void errorHandler_BatteryVoltage_Check(){
             CI_setOverVoltage(OVERVOLTAGE_FALSE_B);
 
             errorHandler_SetError(err_batvoltage,fail);// error qualified
-            printf("undervoltage case\n");
+            #ifdef DEBUG
+                printf("undervoltage case\n");
+            #endif
         }
         else
         {
             underOverVoltageTimer_u8--;
-            printf("still counting for undervoltage\n");
+            #ifdef DEBUG
+                printf("still counting for undervoltage\n");
+            #endif
         }
     }
     else if(Battery_Voltage_UC > UPPER_VOLTAGE_LIMIT_C)
@@ -77,12 +89,16 @@ void errorHandler_BatteryVoltage_Check(){
             CI_setUnderVoltage(UNDERVOLTAGE_FALSE_B);
 
             errorHandler_SetError(err_batvoltage,fail);// error qualified
-            printf("overvoltage case\n");
+            #ifdef DEBUG
+                printf("overvoltage case\n");
+            #endif
         }
         else
         {
             underOverVoltageTimer_u8--;
-            printf("still counting for overvoltage\n");
+            #ifdef DEBUG
+                printf("still counting for overvoltage\n");
+            #endif
         }
     }
     else
@@ -94,13 +110,16 @@ void errorHandler_BatteryVoltage_Check(){
             CI_setUnderVoltage(UNDERVOLTAGE_FALSE_B);            
 
             errorHandler_SetError(err_batvoltage,passed);
-
-            printf("suntem unde trebe\n");
+            #ifdef DEBUG
+                printf("suntem unde trebe\n");
+            #endif
         }
         else
         {
             underOverVoltageTimer_u8--;
-            printf("still cnt\n");
+            #ifdef DEBUG
+                printf("still cnt\n");
+            #endif
         }
         
     }
@@ -110,32 +129,42 @@ void errorHandler_BatteryVoltage_Check(){
 void errorHandler_Communication_Check(){ //struct from read_data
     
     bool isFileOpen = CI_getIsFileOpen();
-    printf("isFileOpen: %d\n", isFileOpen);
-    //printf("Suntem in lostCom\n");
+    #ifdef DEBUG
+        printf("isFileOpen: %d\n", isFileOpen);
+        printf("Suntem in lostCom\n");
+    #endif
     if(isFileOpen == FILE_NOT_OPEN_B)
     {
         if(lostCommTimer_u8 == RUNOUT_TIMER_UI)
         {
             lostCommTimer_u8 = LOSTCOMM_TIMER_UI;
             errorHandler_SetError(err_lostcom,fail);
-            //printf("file did not open\n");
+            #ifdef DEBUG
+                printf("file did not open\n");
+            #endif
         } 
         else if(isFileOpen == FILE_OPEN_B)
         {
             lostCommTimer_u8 = LOSTCOMM_TIMER_UI;
             errorHandler_SetError(err_lostcom,passed);
-           // printf("is in else if\n");
+            #ifdef DEBUG
+                printf("is in else if\n");
+            #endif
         }
         else 
         {
             lostCommTimer_u8--;
-            //printf("timer lostComm: %d\n",lostCommTimer_u8);
-            //printf("is in else\n");
+            #ifdef DEBUG
+                printf("timer lostComm: %d\n",lostCommTimer_u8);
+                printf("is in else\n");
+            #endif
         }
     }
     else{
         errorHandler_SetError(err_lostcom,passed);
-        printf("file was opened\n");
+        #ifdef DEBUG
+            printf("file was opened\n");
+        #endif
     }
 
     

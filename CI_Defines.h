@@ -32,7 +32,7 @@ typedef enum Gear
 {
     neutral,
     forward,
-    reveresed,
+    reversed,
     parked
 } Gear;
 

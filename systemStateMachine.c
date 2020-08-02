@@ -4,17 +4,7 @@
 #include <stdio.h>
 #include "definesSSM.h"
 #include "CI_Defines.h"
-
-const char* getStateName(Ssm crt_state) 
-{
-   switch (crt_state) 
-   {
-      case init: return "INIT";
-      case active: return "ACTIVE";
-      case error: return "ERROR";
-      /* etc... */
-   }
-}
+#include "CommunicationInterface.h"
 
 bool systemStateMachine_check_err_val(ErrStatus err_vect_e[]){
     bool err_existence_b = NO_ERROR_OCURED_U;
@@ -23,11 +13,10 @@ bool systemStateMachine_check_err_val(ErrStatus err_vect_e[]){
     }
     else if(err_vect_e[1]==fail){
         err_existence_b =ERROR_OCURED_U;
-        //printf("nu comunic\n");
+        #ifdef DEBUG
+            printf("nu comunic\n");
+        #endif
     }
-    // else if(err_vect_st[2].errStatus_e==fail){
-    //     err_existence_b =ERROR_OCURED_U;
-    // }
     else{
         err_existence_b=NO_ERROR_OCURED_U;
     }
@@ -37,8 +26,10 @@ bool systemStateMachine_check_err_val(ErrStatus err_vect_e[]){
 Ssm systemStateMachine_change_state(ErrStatus err_vect_e[],int *myTrigger_i){
     Ssm current_state_e = init;
     bool err_exist_b = systemStateMachine_check_err_val(err_vect_e);
-    printf("err_exist_b: %d",err_exist_b);
-    //printf("Trrigger: %d\n",*myTrigger_i);
+    #ifdef DEBUG
+        printf("err_exist_b: %d",err_exist_b);
+        printf("Trrigger: %d\n",*myTrigger_i);
+    #endif
     if((*myTrigger_i) == 0){
         if(err_exist_b == ERROR_OCURED_U){
             current_state_e = error;
@@ -50,10 +41,9 @@ Ssm systemStateMachine_change_state(ErrStatus err_vect_e[],int *myTrigger_i){
     else{
         (*myTrigger_i)--;
         current_state_e = init;
-       // err_exist_b = systemStateMachine_check_err_val(err_vect_st);
     }
     
-    printf("State is: %s\n", getStateName(current_state_e));
+    printf("State is: %s\n", CI_getStateName(current_state_e));
     return current_state_e;
 }
 

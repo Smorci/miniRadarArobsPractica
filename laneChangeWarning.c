@@ -28,21 +28,21 @@ bool laneChangeWarning_check_param(unsigned char speed_uc, Gear gear_e, char ang
 bool laneChangeWarning_set_lcw_state(unsigned char speed_uc, Gear gear_e, char angle_c, Ssm current_ssm_state_e){
     bool current_lcw_state_b = LCW_PASSIVE_U;
     bool check_b = laneChangeWarning_check_param(speed_uc,gear_e,angle_c,current_ssm_state_e);
-    //printf("chek_param returned: %d\n",check_b);
+    #ifdef DEBUG
+        printf("chek_param returned: %d\n",check_b);
+    #endif
 
     if(check_b == CONDITION_NOT_PASSED_U){
         current_lcw_state_b = LCW_PASSIVE_U;
     }
-    //do{
-        //check_b= check_param(speed,gear,angle,current_ssm_state);
+   
     if(check_b == CONDITION_PASSED_U){
         current_lcw_state_b = LCW_ACTIVE_U;
     }
-        //return 1;
-    //}while(check_b == 1);
-
-   //current_lcw_state_b = LCW_PASSIVE;
-   //printf("LCW state is: %d\n",current_lcw_state_b);
+       
+    #ifdef DEBUG
+        printf("LCW state is: %d\n",current_lcw_state_b);
+    #endif
    return current_lcw_state_b;
     
 }

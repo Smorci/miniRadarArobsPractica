@@ -74,6 +74,17 @@ bool CI_isNumber(char line[DS])
     }
     return 0;
 }
+const char* CI_getGearName(Gear mGear_e) 
+{
+   switch (mGear_e) 
+   {
+      case neutral: return "neutral";
+      case forward: return "forward";
+      case reversed: return "reversed";
+      case parked: return "parked";
+      /* etc... */
+   }
+}
 void CI_Read_data()
 {
     bool isFileReadForSet;
@@ -85,6 +96,11 @@ void CI_Read_data()
     {
         isFileReadForSet = false;
         printf("File open: %d\n", isFileReadForSet);
+        messageFromFile.speed_uc=DVS;
+        messageFromFile.gear_e=DVG;
+        messageFromFile.angle_c=DVA;
+        messageFromFile.distance_uc=DVD;
+        messageFromFile.battery_voltage_uc=DVB;
     }
     else
     {
@@ -113,7 +129,7 @@ void CI_Read_data()
                     messageFromFile.gear_e = buffer;
                 else
                     messageFromFile.gear_e = DVG;
-                printf("Gear: %d\n", messageFromFile.gear_e);
+                printf("Gear: %s\n", CI_getGearName(messageFromFile.gear_e));
                 break;
             case (int)2:
                 if (CI_isNumber(lineFromFile[i]))
@@ -207,6 +223,38 @@ Gear CI_getGear()
 {
     return messageFromFile.gear_e;
 }
+
+const char* CI_getErrNameChar(ErrName myErrName_e) 
+{
+   switch (myErrName_e) 
+   {
+      case err_batvoltage: return "battery voltage error";
+      case err_lostcom: return "lost communication error";
+      case err_delimiter: return "delimiter";
+   }
+}
+
+const char* CI_getErrStatusChar(ErrStatus myErrStatus_e) 
+{
+   switch (myErrStatus_e) 
+   {
+      case notperformed: return "not performed";
+      case fail: return "fail";
+      case passed: return "passed";
+   }
+}
+
+const char* CI_getStateName(Ssm crt_state) 
+{
+   switch (crt_state) 
+   {
+      case init: return "INIT";
+      case active: return "ACTIVE";
+      case error: return "ERROR";
+      /* etc... */
+   }
+}
+
 void CI_setGear(Gear gearForSet_e)
 {
     gearForSet_e = messageFromFile.gear_e;

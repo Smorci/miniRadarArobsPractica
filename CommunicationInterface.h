@@ -28,3 +28,7 @@ Ssm CI_getCurrent_ssm_state();
 void CI_setCurrent_ssm_state(Ssm current_ssm_stateForSet_e);
 void CI_getGlobalErr_st(ErrList globalErrForGet_st[]);
 void CI_setGlobalErr_st(ErrList globalErrForSet_st[]);
+const char* CI_getGearName();
+const char* CI_getErrNameChar(ErrName myErrName_e);
+const char* CI_getErrStatusChar(ErrStatus myErrStatus_e);
+const char* CI_getStateName(Ssm crt_state);
