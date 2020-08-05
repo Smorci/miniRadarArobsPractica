@@ -47,7 +47,7 @@ bool laneChangeWarning_set_lcw_state(unsigned char speed_uc, Gear gear_e, char a
     
 }
 
-void laneChangeWarning_check_colision(bool current_lcw_state_b, char distance_c){
+void laneChangeWarning_check_colision(bool current_lcw_state_b, float distance_f){
     Warning_Feature *LCW_Warn_st = malloc(20);
     CI_getLCW_Warning(LCW_Warn_st);
     LCW_Warn_st->isActiv_b=current_lcw_state_b;
@@ -56,7 +56,7 @@ void laneChangeWarning_check_colision(bool current_lcw_state_b, char distance_c)
         LCW_Warn_st->audio_signal_b=0;
     }
     if(current_lcw_state_b == LCW_ACTIVE_U){
-        if(distance_c<=RANGE_LCW_U){
+        if(distance_f<=RANGE_LCW_U){
             LCW_Warn_st->led_light_b=1;
             LCW_Warn_st->audio_signal_b=1;
         }

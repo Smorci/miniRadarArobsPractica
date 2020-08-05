@@ -41,7 +41,7 @@ typedef struct DataFromFile
     unsigned char speed_uc;
      Gear gear_e;
     char angle_c;
-    unsigned char distance_uc;
+    float distance_f;
     unsigned char battery_voltage_uc;
 
 } DataFromFile;

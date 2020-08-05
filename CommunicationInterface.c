@@ -67,7 +67,7 @@ bool CI_isNumber(char line[DS])
 {
     for (int i = 0; i < strlen(line); i++)
     {
-        if (isdigit(line[i]))
+        if (isdigit(line[i])|| line[i]=='.')
         {
             return 1;
         }
@@ -89,7 +89,7 @@ void CI_Read_data()
 {
     bool isFileReadForSet;
     int i = 0;
-    int buffer=0;
+    float buffer=0;
     isFileReadForSet = true;
     FILE *data_file = fopen("data.txt", "r");
     if (data_file == NULL)
@@ -99,7 +99,7 @@ void CI_Read_data()
         messageFromFile.speed_uc=DVS;
         messageFromFile.gear_e=DVG;
         messageFromFile.angle_c=DVA;
-        messageFromFile.distance_uc=DVD;
+        messageFromFile.distance_f=DVD;
         messageFromFile.battery_voltage_uc=DVB;
     }
     else
@@ -144,14 +144,14 @@ void CI_Read_data()
                 break;
             case (int)3:
                 if (CI_isNumber(lineFromFile[i]))
-                    buffer = atoi(lineFromFile[i]);
+                    buffer = atof(lineFromFile[i]);
                 else
                     buffer = DVD;
                 if (buffer >= LDL && buffer <= UDL)
-                    messageFromFile.distance_uc = buffer;
+                    messageFromFile.distance_f = buffer;
                 else
-                    messageFromFile.distance_uc = DVD;
-                printf("Distance: %d\n", messageFromFile.distance_uc);
+                    messageFromFile.distance_f = DVD;
+                printf("Distance: %f\n", messageFromFile.distance_f);
                 break;
             case (int)4:
                 if (CI_isNumber(lineFromFile[i]))
@@ -267,13 +267,13 @@ void CI_setAngle(unsigned char angleForSet_uc)
 {
     angleForSet_uc = messageFromFile.angle_c;
 }
-unsigned char CI_getDistance()
+float CI_getDistance()
 {
-    return messageFromFile.distance_uc;
+    return messageFromFile.distance_f;
 }
-void CI_setDistance(unsigned char distanceForSet_uc)
+void CI_setDistance(float distanceForSet_f)
 {
-    distanceForSet_uc = messageFromFile.distance_uc;
+    distanceForSet_f = messageFromFile.distance_f;
 }
 unsigned char CI_getBatteryVoltage()
 {

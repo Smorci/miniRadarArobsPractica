@@ -40,7 +40,7 @@ void RCTA_colisionRCTA()
     #ifdef DEBUG
         printf("%d %d %d\n", RCTA_Warn->audio_signal_b, RCTA_Warn->isActiv_b, RCTA_Warn->led_light_b);
     #endif
-    unsigned char rctaDist_uc = CI_getDistance();
+    float rctaDist_uc = CI_getDistance();
 
     if (rctaDist_uc <= CDL && RCTA_Warn->isActiv_b == true)
     {
