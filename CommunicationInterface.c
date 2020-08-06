@@ -14,6 +14,8 @@ Warning_Feature LCW_Warning_st;
 Ssm current_ssm_state;
 DataFromFile messageFromFile;
 char lineFromFile[ND][DS];
+//bool valuesFromTestFile[NUMBER_OF_TEST];
+char lineFromTestFile[NUMBER_OF_TEST][DS];
 
 bool CI_getUndervoltage()
 {
@@ -85,6 +87,26 @@ const char* CI_getGearName(Gear mGear_e)
       /* etc... */
    }
 }
+
+void readTestFile(bool valuesFromTestFile[NUMBER_OF_TEST]){
+    //valuesFromTestFile=malloc(1);
+    FILE *test_file = fopen("testfile.txt", "r");
+    int i=0;
+    if(test_file==NULL)
+        printf("fisier invalid");
+    else
+    {
+        while (fgets(lineFromTestFile[i], DS, test_file))
+            {
+                //realloc(valuesFromTestFile,(i+1)*sizeof(int));
+                lineFromTestFile[i][strlen(lineFromTestFile[i]) - 1] = '\0';
+                valuesFromTestFile[i]=(bool)atoi(lineFromTestFile[i]);
+                printf("%d ",valuesFromTestFile[i]);
+                i++;
+            }
+        //printf("\nSize of valuesFromTestFile: %d\n",sizeof(valuesFromTestFile));
+    }//valuesFromTestFileForGet=valuesFromTestFile;
+}
 void CI_Read_data()
 {
     bool isFileReadForSet;
@@ -144,14 +166,16 @@ void CI_Read_data()
                 break;
             case (int)3:
                 if (CI_isNumber(lineFromFile[i]))
-                    buffer = atof(lineFromFile[i]);
+                    buffer =(float) atof(lineFromFile[i]);
                 else
                     buffer = DVD;
                 if (buffer >= LDL && buffer <= UDL)
                     messageFromFile.distance_f = buffer;
                 else
                     messageFromFile.distance_f = DVD;
-                printf("Distance: %f\n", messageFromFile.distance_f);
+                printf("Distance: %4.2f\n", (float)messageFromFile.distance_f);
+                
+
                 break;
             case (int)4:
                 if (CI_isNumber(lineFromFile[i]))
@@ -173,7 +197,7 @@ void CI_Read_data()
     fclose(data_file);
 }
 
-void CI_Write_data(int option_i, int data_i)
+void CI_Write_data(int option_i, float data_i)
 {
     FILE *data_file = fopen("data.txt", "w");
     int i = 0;
@@ -187,10 +211,10 @@ void CI_Write_data(int option_i, int data_i)
         break;
     case (int)2:
         itoa(data_i, lineFromFile[option_i], 10);
-        ;
+        
         break;
     case (int)3:
-        itoa(data_i, lineFromFile[option_i], 10);
+        gcvt(data_i,6, lineFromFile[option_i]);
         break;
     case (int)4:
         itoa(data_i, lineFromFile[option_i], 10);

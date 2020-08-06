@@ -26,6 +26,7 @@
 #define DVB 12 //default value for batery_voltage
 #define DVU 1 //default value for undervoltage
 #define DVO 1 //default value for overvoltage
+#define NUMBER_OF_TEST 4 //ar trebui sa fie numar _teste*nr_verificarile_din_fiecare_test3
 
 //#pragma once
 typedef enum Gear

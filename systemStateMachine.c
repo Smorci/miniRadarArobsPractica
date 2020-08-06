@@ -43,7 +43,7 @@ Ssm systemStateMachine_change_state(ErrStatus err_vect_e[],int *myTrigger_i){
         current_state_e = init;
     }
     
-    printf("State is: %s\n", CI_getStateName(current_state_e));
+    //printf("State is: %s\n", CI_getStateName(current_state_e));
     return current_state_e;
 }
 

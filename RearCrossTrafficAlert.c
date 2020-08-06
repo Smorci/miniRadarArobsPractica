@@ -52,5 +52,5 @@ void RCTA_colisionRCTA()
         RCTA_Warn->led_light_b = false; 
     }
     CI_setRCTA_Warning(RCTA_Warn);
-    printf("Led RCTA: %d and Audio RCTA: %d\n", RCTA_Warn->led_light_b, RCTA_Warn->audio_signal_b);
+    //printf("Led RCTA: %d and Audio RCTA: %d\n", RCTA_Warn->led_light_b, RCTA_Warn->audio_signal_b);
 }
