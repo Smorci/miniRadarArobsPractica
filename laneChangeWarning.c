@@ -62,7 +62,7 @@ void laneChangeWarning_check_colision(bool current_lcw_state_b, float distance_f
         }
     }
     CI_setLCW_Warning(LCW_Warn_st);
-    //printf("Led LCW: %d and Audio LCW: %d\n",LCW_Warn_st->led_light_b,LCW_Warn_st->audio_signal_b);
+   // printf("Led LCW: %d and Audio LCW: %d\n",LCW_Warn_st->led_light_b,LCW_Warn_st->audio_signal_b);
 }
 
 

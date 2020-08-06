@@ -67,14 +67,15 @@ void CI_setLCW_Warning(Warning_Feature *LCW_Warning_ForSet_st)
 }
 bool CI_isNumber(char line[DS])
 {
+    bool ok=1;
     for (int i = 0; i < strlen(line); i++)
     {
-        if (isdigit(line[i])|| line[i]=='.')
+        if (!(isdigit(line[i])|| line[i]=='.'))
         {
-            return 1;
+            ok=0;
         }
     }
-    return 0;
+    return ok;
 }
 const char* CI_getGearName(Gear mGear_e) 
 {
@@ -89,7 +90,6 @@ const char* CI_getGearName(Gear mGear_e)
 }
 
 void readTestFile(bool valuesFromTestFile[NUMBER_OF_TEST]){
-    //valuesFromTestFile=malloc(1);
     FILE *test_file = fopen("testfile.txt", "r");
     int i=0;
     if(test_file==NULL)
@@ -98,14 +98,13 @@ void readTestFile(bool valuesFromTestFile[NUMBER_OF_TEST]){
     {
         while (fgets(lineFromTestFile[i], DS, test_file))
             {
-                //realloc(valuesFromTestFile,(i+1)*sizeof(int));
                 lineFromTestFile[i][strlen(lineFromTestFile[i]) - 1] = '\0';
                 valuesFromTestFile[i]=(bool)atoi(lineFromTestFile[i]);
                 printf("%d ",valuesFromTestFile[i]);
                 i++;
             }
-        //printf("\nSize of valuesFromTestFile: %d\n",sizeof(valuesFromTestFile));
-    }//valuesFromTestFileForGet=valuesFromTestFile;
+    
+    }
 }
 void CI_Read_data()
 {
@@ -114,15 +113,16 @@ void CI_Read_data()
     float buffer=0;
     isFileReadForSet = true;
     FILE *data_file = fopen("data.txt", "r");
+    messageFromFile.speed_uc=DVS;
+    messageFromFile.gear_e=DVG;
+    messageFromFile.angle_c=DVA;
+    messageFromFile.distance_f=DVD;
+    messageFromFile.battery_voltage_uc=DVB;
     if (data_file == NULL)
     {
         isFileReadForSet = false;
         printf("File open: %d\n", isFileReadForSet);
-        messageFromFile.speed_uc=DVS;
-        messageFromFile.gear_e=DVG;
-        messageFromFile.angle_c=DVA;
-        messageFromFile.distance_f=DVD;
-        messageFromFile.battery_voltage_uc=DVB;
+        
     }
     else
     {
@@ -174,8 +174,6 @@ void CI_Read_data()
                 else
                     messageFromFile.distance_f = DVD;
                 printf("Distance: %4.2f\n", (float)messageFromFile.distance_f);
-                
-
                 break;
             case (int)4:
                 if (CI_isNumber(lineFromFile[i]))
@@ -199,6 +197,7 @@ void CI_Read_data()
 
 void CI_Write_data(int option_i, float data_i)
 {
+    
     FILE *data_file = fopen("data.txt", "w");
     int i = 0;
     switch (option_i)
@@ -210,8 +209,7 @@ void CI_Write_data(int option_i, float data_i)
         itoa(data_i, lineFromFile[option_i], 10);
         break;
     case (int)2:
-        itoa(data_i, lineFromFile[option_i], 10);
-        
+        itoa(data_i, lineFromFile[option_i], 10);    
         break;
     case (int)3:
         gcvt(data_i,6, lineFromFile[option_i]);
@@ -219,12 +217,7 @@ void CI_Write_data(int option_i, float data_i)
     case (int)4:
         itoa(data_i, lineFromFile[option_i], 10);
         break;
-    case (int)5:
-        itoa(data_i, lineFromFile[option_i], 10);
-        break;
-    case (int)6:
-        itoa(data_i, lineFromFile[option_i], 10);
-        break;
+    
     default:
         printf("Invalid Option");
     }
